@@ -94,7 +94,7 @@ const AdmissionDashboard = () => {
       </div>
 
       <div className="flex flex-wrap gap-4 items-center">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
@@ -102,7 +102,7 @@ const AdmissionDashboard = () => {
             startDate={startDate}
             endDate={endDate}
             placeholderText="Select start date"
-            className="p-2 rounded border"
+            className="p-2 rounded border w-full sm:w-auto"
           />
           <span className="text-gray-500">to</span>
           <DatePicker
@@ -113,9 +113,10 @@ const AdmissionDashboard = () => {
             endDate={endDate}
             minDate={startDate}
             placeholderText="Select end date"
-            className="p-2 rounded border"
+            className="p-2 rounded border w-full sm:w-auto"
           />
         </div>
+
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded ml-auto cursor-pointer hover:bg-blue-600 transition duration-200"
           onClick={loadData}
