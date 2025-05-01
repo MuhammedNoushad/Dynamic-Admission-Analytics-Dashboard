@@ -29,6 +29,8 @@ const AdmissionDashboard = () => {
     setLoading(true);
     const res = await fetchAdmissionAnalytics();
     setData(res);
+    setStartDate(null);
+    setEndDate(null);
     setLoading(false);
   };
 
@@ -36,15 +38,42 @@ const AdmissionDashboard = () => {
     loadData();
   }, []);
 
-  const filteredTrends = useMemo(() => {
-    if (!data) return [];
-    return data.applicationTrends.filter((item) => {
-      const itemDate = new Date(item.date);
-      return (
-        (!startDate || itemDate >= startDate) &&
-        (!endDate || itemDate <= endDate)
-      );
-    });
+  const filteredData = useMemo(() => {
+    if (!data) return null;
+
+    const isInRange = (dateStr) => {
+      const d = new Date(dateStr);
+      return (!startDate || d >= startDate) && (!endDate || d <= endDate);
+    };
+
+    const applicationTrends = data.applicationTrends.filter((item) =>
+      isInRange(item.date)
+    );
+
+    const applicationPerProgram = data.applicationPerProgram.filter((item) =>
+      isInRange(item.date)
+    );
+
+    const verifiedApplicants = data.verifiedApplicants
+      .filter((item) => isInRange(item.date))
+      .reduce((sum, item) => sum + item.count, 0);
+
+    const rejectedApplicants = data.rejectedApplicants
+      .filter((item) => isInRange(item.date))
+      .reduce((sum, item) => sum + item.count, 0);
+
+    const totalApplicants = applicationTrends.reduce(
+      (sum, item) => sum + item.count,
+      0
+    );
+
+    return {
+      applicationTrends,
+      applicationPerProgram,
+      totalApplicants,
+      verifiedApplicants,
+      rejectedApplicants,
+    };
   }, [data, startDate, endDate]);
 
   if (loading) return <p className="text-center">Loading...</p>;
@@ -53,9 +82,15 @@ const AdmissionDashboard = () => {
   return (
     <div className="p-8 space-y-6">
       <div className="flex flex-wrap justify-around gap-2">
-        <Card title="Total Applicants" count={data.totalApplicants} />
-        <Card title="Verified Applicants" count={data.verifiedApplicants} />
-        <Card title="Rejected Applicants" count={data.rejectedApplicants} />
+        <Card title="Total Applicants" count={filteredData.totalApplicants} />
+        <Card
+          title="Verified Applicants"
+          count={filteredData.verifiedApplicants}
+        />
+        <Card
+          title="Rejected Applicants"
+          count={filteredData.rejectedApplicants}
+        />
       </div>
 
       <div className="flex flex-wrap gap-4 items-center">
@@ -91,13 +126,13 @@ const AdmissionDashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ChartWrapper title="Applications per Program">
-          {data.applicationPerProgram.length === 0 ? (
+          {filteredData.applicationPerProgram.length === 0 ? (
             <div className="h-72 flex items-center justify-center text-gray-500">
               No data found
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={data.applicationPerProgram}>
+              <BarChart data={filteredData.applicationPerProgram}>
                 <XAxis dataKey="program" />
                 <YAxis />
                 <Tooltip />
@@ -108,13 +143,13 @@ const AdmissionDashboard = () => {
         </ChartWrapper>
 
         <ChartWrapper title="Application Trends">
-          {filteredTrends.length === 0 ? (
+          {filteredData.applicationTrends.length === 0 ? (
             <div className="h-72 flex items-center justify-center text-gray-500">
               No data found
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={filteredTrends}>
+              <LineChart data={filteredData.applicationTrends}>
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />
