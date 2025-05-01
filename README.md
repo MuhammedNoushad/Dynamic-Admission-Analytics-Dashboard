@@ -1,12 +1,38 @@
-# React + Vite
+# 🎓 Dynamic Admission Analytics Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive analytics dashboard built with **React**, **Tailwind CSS**, **Recharts**, and **React DatePicker** to visualize university admission statistics with date-based filtering.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 📊 Total, Verified, and Rejected applicant summary cards
+- 📅 Date range filter to dynamically update charts and counts
+- 📈 Line chart for application trends over time
+- 📊 Bar chart for applications per program
+- 🔄 Refresh button to simulate live data fetching
+- ⚡ Smooth responsive design using Tailwind CSS
+- ☁️ Mock API integrated with `useEffect`, `useMemo`, and `useState`
+
+---
+
+## 🛠 Tech Stack
+
+- **React**
+- **Tailwind CSS**
+- **Recharts**
+- **React DatePicker**
+- **Mock API (simulated with `setTimeout`)**
+
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/Dynamic-Admission-Analytics-Dashboard.git
+cd Dynamic-Admission-Analytics-Dashboard
+npm install
+npm run dev
